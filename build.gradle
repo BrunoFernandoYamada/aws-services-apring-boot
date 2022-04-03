@@ -1,0 +1,46 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.6'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'br.com.byamada'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//testImplementation 'org.springframework.security:spring-security-test'
+
+	implementation group: 'com.h2database', name: 'h2', version: '2.1.210'
+
+	//[AWS-SQS] [Step1] Adding libs
+	//simplifying use of JMS of Java
+	implementation group: 'org.springframework', name: 'spring-jms', version: '5.3.18'
+	//make aws integration easily
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.12.191'
+	//implementation to communicate with queue
+	implementation group: 'com.amazonaws', name: 'amazon-sqs-java-messaging-lib', version: '1.0.8'
+
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

@@ -1,0 +1,15 @@
+tags:
+
+[AWS-SQS] Using sqs (Simple queue service) Aws
+
+
+Execute the followed steps to configure ambient for SQS
+
+1 - Install AWS/CLI
+2 - Configure AWS:
+        run command AWS configure
+        set  values of accessKey, secretKey, region (us-east-1), set type to 'json'
+
+4 - execute docker-compose up -d
+5 - run the command to create queues:
+        ./create_queue.sh
