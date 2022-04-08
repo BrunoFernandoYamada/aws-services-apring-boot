@@ -1,6 +1,9 @@
 //[AWS-SQS] [Step 3] Configuring the jms
 package br.com.byamada.awsservicesapringboot.config;
 
+import brave.Tracer;
+import brave.Tracing;
+import brave.instrumentation.aws.sqs.SqsMessageTracing;
 import com.amazon.sqs.javamessaging.ProviderConfiguration;
 import com.amazon.sqs.javamessaging.SQSConnectionFactory;
 import com.amazonaws.auth.AWSCredentials;
@@ -9,7 +12,6 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -40,15 +42,29 @@ public class JmsConfig {
 
     private SQSConnectionFactory sqsConnectionFactory;
 
+    //[TRACING SQS] [step 2] Inject Tracer
+    @Autowired
+    private Tracer tracer;
+
     @PostConstruct
     public void init() {
         sqsConnectionFactory = createConnectionFactory();
     }
 
     public SQSConnectionFactory createConnectionFactory(){
+
+        //[TRACING SQS] [step 3] Configure Tracing and SqsMessageTracing
+        Tracing current = Tracing.current();
+        SqsMessageTracing sqsMessageTracing = SqsMessageTracing.create(current);
+
         final AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
         final AWSStaticCredentialsProvider credentialsProvider = new AWSStaticCredentialsProvider(credentials);
-        AmazonSQS sqs = AmazonSQSClientBuilder.standard().withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(serviceEndpoint, region)).withCredentials(credentialsProvider).build();
+        AmazonSQS sqs = AmazonSQSClientBuilder.standard()
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(serviceEndpoint, region))
+                //[TRACING SQS] [step 4]
+                .withCredentials(credentialsProvider).withRequestHandlers(sqsMessageTracing.requestHandler())
+                .build();
+
         return new SQSConnectionFactory(new ProviderConfiguration(), sqs);
     }
 

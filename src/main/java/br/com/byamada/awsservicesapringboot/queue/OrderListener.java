@@ -22,7 +22,7 @@ public class OrderListener {
     private final ObjectMapper objectMapper;
     private final OrderService service;
 
-    @JmsListener(destination = "order-registration")
+    //@JmsListener(destination = "order-registration")
     public void orderValidator(@Headers Map<String,Object> messageAtributes, @Payload String message) throws Exception{
         log.info("*** A message was received!");
         try {
