@@ -7,6 +7,10 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.services.cloudwatch.AmazonCloudWatch;
+import com.amazonaws.services.cloudwatch.AmazonCloudWatchClientBuilder;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +39,7 @@ public class AWSConfiguration {
         return credentialsProvider;
     }
 
+    //[TRACING SQS] [step 2] Configuring
     @Bean
     public AmazonSQS amazonSQS(AWSCredentialsProvider awsCredentialsProvider) {
         return AmazonSQSClientBuilder.standard()
@@ -42,6 +47,22 @@ public class AWSConfiguration {
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(serviceEndpoint, region))
                 //[TRACING SQS] [step 4]
                 .withRequestHandlers(sqsMessageTracing().requestHandler())
+                .build();
+    }
+
+    //[AWS - ClOUDWATCH] [STEP 1] Configuring
+    @Bean
+    public AmazonCloudWatch amazonCloudWatch(AWSCredentialsProvider awsCredentialsProvider) {
+        return AmazonCloudWatchClientBuilder.standard()
+                .withCredentials(awsCredentialsProvider)
+                .withRegion(region)
+                .build();
+    }
+
+    //[AWS - S3] [STEP 1] Configuring
+    public AmazonS3 amazonS3() {
+        return AmazonS3ClientBuilder.standard()
+                .withRegion(region)
                 .build();
     }
 

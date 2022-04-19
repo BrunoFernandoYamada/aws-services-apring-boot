@@ -1,6 +1,9 @@
 tags:
 
-[AWS-SQS] Using sqs (Simple queue service) Aws
+[AWS-SQS] Using AWS SQS (Simple queue service) Aws
+[TRACING SQS] Using distributed Tracing with AWS SQS and Sleuth
+[AWS - ClOUDWATCH] Using AWS CloudWatch
+[AWS - S3] Using AWS S3 bucket
 
 
 Execute the followed steps to configure ambient for SQS
