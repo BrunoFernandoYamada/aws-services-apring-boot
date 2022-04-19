@@ -42,14 +42,14 @@ public class JmsConfig {
 
     private SQSConnectionFactory sqsConnectionFactory;
 
-    //[TRACING SQS] [step 2] Inject Tracer
     @Autowired
-    private Tracer tracer;
+    private AmazonSQS amazonSQS;
 
     @PostConstruct
     public void init() {
         sqsConnectionFactory = createConnectionFactory();
     }
+/*
 
     public SQSConnectionFactory createConnectionFactory(){
 
@@ -66,6 +66,11 @@ public class JmsConfig {
                 .build();
 
         return new SQSConnectionFactory(new ProviderConfiguration(), sqs);
+    }
+*/
+    //v2
+    public SQSConnectionFactory createConnectionFactory(){
+        return new SQSConnectionFactory(new ProviderConfiguration(), amazonSQS);
     }
 
     @Bean
