@@ -6,10 +6,13 @@ services:
     image: localstack/localstack:latest
     environment:
       - AWS_DEFAULT_REGION=us-east-1
-      - EDGE_PORT=4566
-      - SERVICES=sqs
+      - SERVICES=sqs,sns,s3
+      - DATA_DIR=/tmp/localstack/data
+      - HOST_TMP_FOLDER=${TMPDIR:-/tmp/}localstack
+      - DOCKER_HOST=unix:///var/run/docker.sock
     ports:
-      - '4566:4566'
+      - '4566-4568:4566-4568'
+      - '4571:4571'
     volumes:
-      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "./.localstack:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"

@@ -4,6 +4,7 @@ tags:
 [TRACING SQS] Using distributed Tracing with AWS SQS and Sleuth
 [AWS - ClOUDWATCH] Using AWS CloudWatch
 [AWS - S3] Using AWS S3 bucket
+[AWS - SNS] Using AWS SNS pub/sub service
 
 
 Execute the followed steps to configure ambient for SQS
@@ -15,4 +16,4 @@ Execute the followed steps to configure ambient for SQS
 
 4 - execute docker-compose up -d
 5 - run the command to create queues:
-        ./create_queue.sh
+        create_queue_topic_bucket.sh
